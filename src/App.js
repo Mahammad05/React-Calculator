@@ -1,23 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import Display from "./Display";
+import ButtonBox from "./ButtonBox";
+import { useState, useEffect } from "react";
 
 function App() {
+  const [result, setResult] = useState('');
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const key = e.key;
+      const button = document.querySelector('[value="' + key + '"]');
+      if(button) {
+        calcResult(key);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [result]);
+
+  const handleBtnClick = (e) => {
+    const value = e.target.value;
+    calcResult(value);
+  };
+
+  const calcResult = (value) => {
+    switch (value) {
+      case 'Enter':
+        try {
+          setResult(eval(result).toString());
+        } catch (error) {
+          setResult('Error');
+          console.log(error.message + ' ' + 'or Unexpected formula');
+        }
+        break;
+      case 'RESET':
+        setResult('');
+        break;
+      case 'Backspace':
+        setResult((prevResult) => prevResult.slice(0, -1));
+        break;
+      default:
+        setResult((prevResult) => prevResult + value);
+        break;
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="calculator">
+        <Display result={result} />
+        <ButtonBox handleBtnClick={handleBtnClick} />
+      </div>
     </div>
   );
 }
