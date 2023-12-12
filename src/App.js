@@ -43,10 +43,18 @@ function App() {
         setResult((prevResult) => prevResult.slice(0, -1));
         break;
       default:
+        if (value === '0' && result === '0') {
+          break;
+        }
+        else if (value !== '.' && result[result.length - 1] === '0') {
+          setResult(result.slice(0, -1));
+        }
         setResult((prevResult) => prevResult + value);
         break;
     }
   }
+
+  // console.log(result[result.length - 1]);
 
   return (
     <div className="App">
