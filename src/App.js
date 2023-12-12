@@ -54,8 +54,6 @@ function App() {
     }
   }
 
-  // console.log(result[result.length - 1]);
-
   return (
     <div className="App">
       <div className="calculator">
